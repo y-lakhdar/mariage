@@ -1,0 +1,124 @@
+/* Photo-led editorial layout. Sticky scenes are enhanced only after GSAP is ready. */
+.reading-progress { position: fixed; inset: 0 0 auto; height: 2px; background: var(--gold); z-index: 50; transform: scaleX(0); transform-origin: left; }
+main { overflow: clip; }
+.hero-scroll { position: relative; }
+.hero-stage { overflow: visible; }
+.hero-art { transform-origin: center; }
+.hero-endword { display: none; }
+.scroll-ready .hero-scroll { height: 165svh; }
+.scroll-ready .hero-stage { position: sticky; top: 0; height: 100svh; min-height: 720px; }
+.scroll-ready .hero-endword { display: block; position: absolute; left: 22%; top: 43%; font-family: var(--serif); font-style: italic; font-size: clamp(180px, 30vw, 480px); line-height: .8; letter-spacing: -14px; color: var(--paper); opacity: 0; z-index: 4; pointer-events: none; }
+.scroll-photo { position: absolute; }
+.scroll-photo-mask { width: 100%; height: 100%; overflow: hidden; }
+.scroll-photo img { width: 100%; height: 125%; object-fit: cover; margin-top: -12.5%; }
+.type-fragment { position: absolute; font-family: var(--serif); line-height: .8; font-style: italic; pointer-events: none; user-select: none; }
+
+.invitation-scene { padding: 0; max-width: none; text-align: left; position: relative; background: var(--paper); }
+.invitation-stage { height: 1230px; position: relative; max-width: 1700px; margin: auto; }
+.invitation-color-block { position: absolute; left: 0; top: 15%; width: 45%; height: 70%; background: var(--sage); }
+.invitation-photo-left { width: 39%; height: 42%; top: 8%; left: 6%; z-index: 1; }
+.invitation-photo-left img { object-position: 43% center; }
+.invitation-photo-right { width: 30%; height: 30%; top: 65%; right: 6%; z-index: 3; }
+.invitation-photo-right img { object-position: 50% 50%; }
+.invitation-text { position: absolute; left: 51%; top: 16%; width: 41%; z-index: 4; }
+.invitation-text h2 { font-size: clamp(43px, 4.7vw, 70px); line-height: 1.04; margin-top: 24px; }
+.invitation-text h2 br { display: none; }
+.invitation-text .intro-text { margin: 24px 0 0; max-width: 480px; }
+.invitation-text .handwritten { max-width: 390px; font-size: 25px; line-height: 1.3; }
+.invitation-text .invitation-spark { margin: 25px 0 0; }
+.type-fragment--love { left: 6%; top: 65%; font-size: clamp(140px, 19vw, 290px); color: var(--ink); letter-spacing: -10px; z-index: 2; }
+.story { position: relative; padding-top: 90px; padding-bottom: 170px; }
+.story-main { border-radius: 2px; }
+.story-detail-photo { position: absolute; bottom: -30px; right: -10px; width: 60%; z-index: 2; }
+.story-detail-photo img { aspect-ratio: .9; width: 100%; object-fit: cover; }
+.photo-spark { bottom: 0; }
+.story-copy { position: relative; z-index: 3; }
+
+.weekend { padding-top: 0; }
+.weekend-scroll { position: relative; height: 850px; }
+.weekend-stage { position: relative; height: 100%; overflow: clip; background: var(--ink); }
+.scroll-ready .weekend-scroll { height: 165svh; }
+.scroll-ready .weekend-stage { height: 100svh; min-height: 650px; position: sticky; top: 0; }
+.weekend-backdrop { inset: 0; }
+.weekend-backdrop img { object-position: center 46%; }
+.weekend-shade { position: absolute; inset: 0; background: linear-gradient(90deg, #152b24ae, #152b2445 65%, #152b2430); }
+.weekend-title { position: absolute; top: 19%; left: var(--gutter); z-index: 3; color: var(--paper); }
+.weekend-title h2 { font-size: clamp(66px, 7.8vw, 116px); line-height: .98; margin: 25px 0; letter-spacing: -3px; }
+.weekend-title > p:last-child { font-size: 13px; letter-spacing: 1px; }
+.weekend-outline { position: absolute; z-index: 4; left: -1%; bottom: 2%; font-family: var(--serif); font-size: clamp(150px, 24vw, 370px); letter-spacing: -10px; line-height: .8; color: transparent; -webkit-text-stroke: 1px #f6f5eea0; white-space: nowrap; pointer-events: none; }
+.weekend-foreground { width: 28%; height: 42%; right: 7%; top: 49%; z-index: 2; }
+.weekend-foreground img { object-position: 57% center; }
+.weekend-intro { display: flex; align-items: center; justify-content: space-between; padding: 52px 0 36px; font-family: var(--serif); font-size: 30px; }
+.weekend-intro svg { color: var(--gold); }
+.details-opening { height: 730px; position: relative; margin-block: 60px 50px; }
+.details-photo { width: 46%; height: 73%; top: 10%; left: 0; }
+.details-photo img { object-position: center 50%; }
+.details-opening .section-heading { position: absolute; left: 54%; top: 28%; display: block; margin: 0; z-index: 3; }
+.details-opening .section-heading > p { margin-top: 27px; }
+.type-fragment--details { font-size: clamp(150px, 22vw, 310px); color: #9b783850; left: 26%; bottom: 0; letter-spacing: -9px; z-index: 2; }
+.calendar-section { background: #30483e; color: var(--paper); }
+.closing-backdrop { inset: 0; }
+.closing-backdrop img { object-position: center 45%; }
+.closing-shade { position: absolute; inset: 0; background: #132c25b8; }
+.calendar-inner { padding-block: 110px; }
+.calendar-inner > p:not(.eyebrow), .calendar-note { color: #eef0e7; }
+.calendar-spark { color: #e3cb91; }
+.calendar-section .button-dark { background: var(--paper); color: var(--ink); }
+.calendar-section .button-outline { border-color: #f6f5eea0; color: var(--paper); background: #1e352a66; }
+.calendar-orbit { z-index: 1; border-color: #eedba04d; }
+
+@media (max-width: 1000px) {
+  .invitation-stage { height: 1200px; }
+  .invitation-text { top: 12%; width: 43%; }
+  .invitation-text h2 { font-size: 48px; }
+  .invitation-photo-left { height: 44%; }
+  .invitation-photo-right { top: 70%; height: 25%; width: 35%; }
+  .type-fragment--love { top: 68%; }
+  .details-opening { height: 620px; }
+  .weekend-foreground { width: 32%; }
+}
+
+@media (max-width: 600px) {
+  .scroll-ready .hero-scroll { height: auto; }
+  .scroll-ready .hero-stage { position: relative; height: auto; min-height: 0; }
+  .scroll-ready .hero-endword { display: none; }
+  .hero-art { margin-top: 30px; }
+  .invitation-stage { height: auto; padding: 70px 24px 55px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 0; }
+  .invitation-color-block { top: 7%; width: 80%; height: 30%; }
+  .invitation-photo-left { position: relative; grid-column: 1 / -1; width: 87%; height: 365px; top: auto; left: 0; }
+  .invitation-text { position: relative; grid-column: 1 / -1; top: auto; left: auto; width: 100%; }
+  .invitation-text h2 { font-size: 44px; }
+  .invitation-text .intro-text { font-size: 13px; }
+  .invitation-text .handwritten { font-size: 24px; }
+  .invitation-photo-right { position: relative; grid-column: 2; grid-row: 3; top: auto; right: auto; width: 115%; height: 250px; margin-left: -15%; }
+  .type-fragment--love { top: auto; bottom: 135px; left: 3%; font-size: 30vw; letter-spacing: -5px; z-index: 4; }
+  .story { padding-top: 35px; padding-bottom: 80px; }
+  .story-photos { padding-bottom: 90px; }
+  .story-detail-photo { bottom: 10px; right: -7px; width: 53%; }
+  .story-main { height: 390px; }
+  .weekend-scroll { height: 730px; }
+  .scroll-ready .weekend-scroll { height: 120svh; }
+  .scroll-ready .weekend-stage { height: 90svh; min-height: 620px; }
+  .weekend-title { top: 12%; left: 24px; right: 24px; }
+  .weekend-title h2 { font-size: clamp(50px, 13vw, 70px); letter-spacing: -2px; }
+  .weekend-title .eyebrow { font-size: 8px; letter-spacing: 1.8px; }
+  .weekend-title > p:last-child { font-size: 11px; }
+  .weekend-foreground { top: 59%; right: 7%; width: 48%; height: 28%; }
+  .weekend-outline { bottom: 9%; font-size: 29vw; letter-spacing: -5px; }
+  .weekend-backdrop img { object-position: 40% center; }
+  .weekend-intro { padding: 35px 0; font-size: 25px; line-height: 1.2; gap: 20px; }
+  .details-opening { height: auto; margin-block: 40px; padding-bottom: 10px; }
+  .details-photo { position: relative; width: 87%; height: 410px; top: auto; }
+  .type-fragment--details { top: 295px; bottom: auto; left: 26%; font-size: 37vw; letter-spacing: -5px; }
+  .details-opening .section-heading { position: relative; top: auto; left: auto; margin: 45px 0 0; }
+  .calendar-inner { padding-block: 75px; }
+  .closing-backdrop img { object-position: 45% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-ready .hero-scroll, .scroll-ready .weekend-scroll { height: auto; }
+  .scroll-ready .hero-stage { position: relative; height: auto; }
+  .scroll-ready .weekend-stage { position: relative; height: 850px; }
+  .scroll-ready .hero-endword { display: none; }
+  .scroll-photo, .scroll-photo img, .type-fragment { transform: none !important; }
+}

@@ -1,0 +1,17 @@
+---
+import Photo from './Photo.astro';
+import { scrollPhotos } from '../content/wedding';
+
+interface Props {
+  slot: keyof typeof scrollPhotos;
+  class?: string;
+  travel?: number;
+  rotate?: number;
+  sizes?: string;
+}
+const { slot, class: className, travel = 140, rotate = 0, sizes = '(max-width: 600px) 85vw, 45vw' } = Astro.props;
+const photo = scrollPhotos[slot];
+---
+<div class:list={['scroll-photo', className]} data-photo-slot={slot} data-travel={travel} data-rotate={rotate}>
+  <div class="scroll-photo-mask"><Photo id={photo.id} alt={photo.alt} sizes={sizes} /></div>
+</div>
