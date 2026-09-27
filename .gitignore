@@ -8,3 +8,6 @@ dist/
 test-results/
 playwright-report/
 public/photos/
+.wrangler/
+.dev.vars
+.dev.vars.*

@@ -61,7 +61,47 @@ npm test
 
 Les captures réalisées par les tests sont dans `test-results/`.
 
-## Publier sur Cloudflare Pages, sans domaine
+## Déploiement automatique — Cloudflare Workers
+
+Le site est déployé sur **https://mariage.yassine-lakhdar.workers.dev**, dans le Worker **`mariage`**.
+`wrangler.jsonc` configure l’hébergement des fichiers statiques de `dist/` ; aucun serveur Astro ni adaptateur SSR n’est nécessaire.
+
+### Configuration initiale dans GitHub
+
+Dans [Settings → Secrets and variables → Actions](https://github.com/y-lakhdar/mariage/settings/secrets/actions), ajouter ces deux **Repository secrets** :
+
+| Secret | Valeur |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | ID du compte Cloudflare qui possède le Worker `mariage` |
+| `CLOUDFLARE_API_TOKEN` | Token créé avec le modèle **Edit Cloudflare Workers**, limité à ce compte |
+
+Le token se crée dans Cloudflare → API Tokens. L’Account ID se trouve dans les informations du compte Cloudflare ; ce n’est ni le nom du Worker ni son sous-domaine.
+
+### À chaque push sur `main`
+
+Le workflow `.github/workflows/deploy.yml` installe les dépendances avec `npm ci` sous Node 24, vérifie le projet, génère les photos et le site, puis exécute `wrangler deploy`. `SITE_URL` est défini dans le workflow pour les métadonnées de partage et l’URL canonique.
+
+Consulter [GitHub → Actions](https://github.com/y-lakhdar/mariage/actions) pour les journaux, puis Cloudflare → Workers & Pages → `mariage` → Deployments. Le workflow peut aussi être lancé avec **Run workflow**. Inclure les originaux de `photos_mariage/` dans chaque push qui change les photos.
+
+Si le Worker est également connecté à **Cloudflare Workers Builds**, désactiver son build Git automatique pour éviter deux déploiements concurrents : GitHub Actions assure ici le déploiement.
+
+### Vérifier ou publier depuis le terminal
+
+```sh
+SITE_URL=https://mariage.yassine-lakhdar.workers.dev npm run build
+npm run deploy:check
+```
+
+La vérification est locale et ne publie rien. Pour publier manuellement après le build :
+
+```sh
+npx wrangler login
+npm run deploy
+```
+
+## Autre option : Cloudflare Pages
+
+Les instructions suivantes concernent Pages, et non le Worker configuré ci-dessus.
 
 ### Première publication par téléversement
 
