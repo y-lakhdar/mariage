@@ -3,16 +3,19 @@ import Photo from './Photo.astro';
 import { scrollPhotos } from '../content/wedding';
 
 interface Props {
-  slot: keyof typeof scrollPhotos;
+  slot?: keyof typeof scrollPhotos;
+  id?: string;
+  alt?: string;
   class?: string;
   travel?: number;
   rotate?: number;
   sizes?: string;
   natural?: boolean;
 }
-const { slot, class: className, travel = 140, rotate = 0, sizes = '(max-width: 600px) 85vw, 45vw', natural = false } = Astro.props;
-const photo = scrollPhotos[slot];
+const { slot, id, alt, class: className, travel = 140, rotate = 0, sizes = '(max-width: 600px) 85vw, 45vw', natural = false } = Astro.props;
+const photo = slot ? scrollPhotos[slot] : id && alt ? { id, alt } : null;
+if (!photo) throw new Error('ScrollPhoto requires either a slot or an id and alt.');
 ---
-<div class:list={['scroll-photo', className, { 'scroll-photo--natural': natural }]} data-photo-slot={slot} data-travel={travel} data-rotate={rotate} data-natural={natural || undefined}>
+<div class:list={['scroll-photo', className, { 'scroll-photo--natural': natural }]} data-photo-slot={slot || undefined} data-travel={travel} data-rotate={rotate} data-natural={natural || undefined}>
   <div class="scroll-photo-mask"><Photo id={photo.id} alt={photo.alt} sizes={sizes} /></div>
 </div>

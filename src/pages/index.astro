@@ -73,7 +73,7 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
 
       <section id="histoire" class="story section-wrap" data-scroll-scene>
         <div class="story-photos reveal">
-          <Photo id="course" alt="Marie-Audrée et Yassine réunis après la ligne d’arrivée de l’Ultra-Trail Harricana" class="story-race-photo" />
+          <ScrollPhoto id="course" alt="Marie-Audrée et Yassine réunis après la ligne d’arrivée de l’Ultra-Trail Harricana" class="story-race-photo" travel={90} rotate={0} natural sizes="(max-width: 600px) 90vw, 46vw" />
         </div>
         <div class="story-copy reveal">
           <p class="eyebrow">01 / L’histoire derrière le oui</p>
@@ -81,7 +81,10 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
           <p class="story-lead">{wedding.story[0]}</p>
           {wedding.story.slice(1).map(paragraph => <p>{paragraph}</p>)}
           <p>Le message était assez clair. Gab était un peu déçu que Yassine ne soit pas arrivé 7e, mais il nous pardonne puisqu’il sera un de nos célébrants.</p>
-          <figure class="story-proof"><a href="/photos/preuve-1800.webp" target="_blank" rel="noreferrer" aria-label="Agrandir la preuve en image (nouvel onglet)"><Photo id={wedding.storyProof.id} alt={wedding.storyProof.alt} sizes="(max-width: 600px) 85vw, 360px" /></a><figcaption>La preuve en image.</figcaption></figure>
+          <p class="story-postscript">P.S. On vous jure, on est vraiment contents.</p>
+          <figure class="story-proof"><a href="/photos/preuve-1800.webp" target="_blank" rel="noreferrer" aria-label="Agrandir la preuve en image (nouvel onglet)"><Photo id={wedding.storyProof.id} alt={wedding.storyProof.alt} sizes="(max-width: 600px) 85vw, 360px" /></a>
+            <figcaption>La preuve en image.</figcaption></figure>
+           
         </div>
       </section>
 
@@ -90,8 +93,8 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
           <div class="invitation-color-block" aria-hidden="true"></div>
           <ScrollPhoto slot="invitationLeft" class="invitation-photo-left" travel={150} rotate={0} natural />
           <div class="invitation-text">
-            <p class="eyebrow">Vous, nous, et un peu de magie</p>
-            <h2>Pas tout à fait un mariage traditionnel. Tout à fait <em>nous.</em></h2>
+            <h2>Pas tout à fait un mariage traditionnel. Mais ben du fun </h2>
+            <h3><em>...et on se couchera pas à 21h00<br />(oui oui, même Marie).</em></h3>
             <p class="intro-text">{wedding.intro}</p>
             <div class="handwritten">Vous êtes invité.es avec votre partenaire et vos enfants.</div>
             <Icon name="spark" class="invitation-spark" />
@@ -105,11 +108,11 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
             <ScrollPhoto slot="weekendBackdrop" class="weekend-backdrop" travel={0} sizes="100vw" />
             <div class="weekend-shade" aria-hidden="true"></div>
             <div class="weekend-title">
-              <p class="eyebrow">02 / Une parenthèse</p>
+              <p class="eyebrow">02 / Section inutile</p>
               <h2>Voici une section qui ne sert à rien,<br /><em>mais Yassine voulait vous montrer ces photos-là.</em></h2>
-              <p>Du 9 au 10 octobre 2027.</p>
+              <p>Du 8 au 10 octobre 2027.</p>
             </div>
-            <span class="weekend-outline" aria-hidden="true">09 — 10</span>
+            <span class="weekend-outline" aria-hidden="true">08 — 10</span>
             <ScrollPhoto slot="weekendForeground" class="weekend-foreground" travel={270} rotate={-4} sizes="(max-width: 600px) 48vw, 28vw" />
           </div>
         </div>
@@ -122,32 +125,26 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
 
       <section id="infos" class="practical section-wrap">
         <div class="details-opening" data-scroll-scene>
-          <ScrollPhoto slot="detailsTransition" class="details-photo" travel={100} rotate={0} natural />
           <div class="section-heading">
             <div><p class="eyebrow">03 / Les petits détails</p><h2>La logistique.<em class="heading-aside">(Marie aime la logistique).</em></h2></div>
             <p>Nous avons décidé de célébrer ça au camp pour accueillir tout le monde et simplifier la logistique des invités, car certains d’entre vous arriverez d’aussi loin que le Luxembourg, le Maroc et Saint-Jérôme.</p>
             <p>Nous ne souhaitons donc pas recevoir de cadeaux, mais nous vous demanderons un montant par adulte pour contribuer à la location du camp.</p>
             <p>Détails à venir.</p>
           </div>
+          <ScrollPhoto slot="detailsTransition" class="details-photo" travel={100} rotate={0} natural />
         </div>
         <div class="location-card reveal"><div class="location-photo"><Photo id="canot" alt="Des canots au bord d’un quai, sous un ciel de coucher de soleil reflété dans l’eau" /></div><div class="location-copy"><span class="eyebrow"><Icon name="pin" /> Le point de rendez-vous</span><h3>{wedding.town}</h3><address>2311 Rte 148<br />Grenville-sur-la-Rouge, Québec J0V 1B0</address><a class="text-link" href={mapsUrl} target="_blank" rel="noreferrer">Ouvrir l’itinéraire <Icon name="northeast" /></a></div></div>
         <div class="practical-grid">{wedding.practical.map(item => <article class="practical-item reveal"><Icon name={item.icon} /><h3>{item.title}</h3><p>{item.text}</p><span class="status-tag">{item.status}</span></article>)}</div>
-        <div class="faq-block reveal"><div><p class="eyebrow">Vous vous demandez peut-être…</p><h3>Les bonnes<br /><em>questions.</em></h3></div><div class="faq-list">{wedding.faq.map(item => <details><summary>{item.question}<Icon name="plus" /></summary><p>{item.answer}</p></details>)}</div></div>
       </section>
 
-      <section id="calendrier" class="calendar-section" data-scroll-scene>
-        <ScrollPhoto slot="closingBackdrop" class="closing-backdrop" travel={0} sizes="100vw" />
-        <div class="closing-shade" aria-hidden="true"></div>
-        <div class="calendar-orbit" aria-hidden="true"></div>
-        <div class="section-wrap calendar-inner reveal"><Icon name="spark" class="calendar-spark" /><p class="eyebrow">La prochaine aventure commence ici</p><h2>Il ne manque<br />plus que <em>vous.</em></h2><p>Bloquez la fin de semaine.<br />Pour les beaux souvenirs, on s’en occupe ensemble.</p><div class="calendar-date">8 — 10 <span>octobre</span> 2027</div><div class="calendar-buttons"><a class="button button-dark" href={googleCalendarUrl()} target="_blank" rel="noreferrer"><Icon name="calendar" /> Google Calendar <Icon name="northeast" /></a><a class="button button-outline" href="/invitation.ics" download="mariage-marie-audree-yassine.ics"><Icon name="down" /> Apple / Outlook (.ics)</a></div><span class="calendar-note">Toute la fin de semaine · Célébration le samedi 9 octobre</span></div>
-      </section>
       <aside class="updates section-wrap"><div class="update-dot" aria-hidden="true"></div><div><strong>Cette invitation grandit avec nos préparatifs.</strong><p>Horaires, repas, tarifs, jeux… Revenez faire un tour, on ajoutera les détails ici.</p></div><span>Mis à jour le <time datetime={wedding.updated}>{updated}</time></span></aside>
-      <div class="ending-scene" data-scroll-scene>
-        <p class="ending-note">Et la suite,<br /><em>ensemble.</em></p>
+      <section id="calendrier" class="ending-scene calendar-ending" data-scroll-scene>
+        <div class="calendar-orbit" aria-hidden="true"></div>
+        <div class="calendar-inner reveal"><Icon name="spark" class="calendar-spark" /><h2>Il ne manque<br />plus que <em>vous.</em></h2><p>Bloquez la fin de semaine.</p><div class="calendar-date">8 — 10 <span>octobre</span> 2027</div><div class="calendar-buttons"><a class="button button-dark" href={googleCalendarUrl()} target="_blank" rel="noreferrer"><Icon name="calendar" /> Google Calendar <Icon name="northeast" /></a><a class="button button-outline" href="/invitation.ics" download="mariage-marie-audree-yassine.ics"><Icon name="down" /> Apple / Outlook (.ics)</a></div><span class="calendar-note">Toute la fin de semaine · Célébration le samedi 9 octobre</span></div>
         <ScrollPhoto slot="endingPhoto" class="ending-photo" travel={0} sizes="(max-width: 600px) 100vw, 60vw" />
-      </div>
+      </section>
     </main>
-    <footer class="site-footer section-wrap"><a class="monogram" href="#accueil" aria-label="Retour en haut">m<span>&</span>y<span class="monogram-dot">.</span></a><p>Fait avec amour. Pour célébrer le nôtre.</p><span>On a hâte de vous voir <Icon name="heart" /></span></footer>
+    <footer class="site-footer section-wrap"><a class="monogram" href="#accueil" aria-label="Retour en haut">m<span>&</span>y<span class="monogram-dot">.</span></a><p>Youpi</p><span>On a hâte de vous voir <Icon name="heart" /></span></footer>
     <script src="../scripts/interactions.ts"></script>
   </body>
 </html>

@@ -35,9 +35,9 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
   expect(errors).toEqual([]);
 });
 
-test('six plans photo, défilement réversible et questions pratiques', async ({ page }, testInfo) => {
+test('cinq plans photo et défilement réversible', async ({ page }, testInfo) => {
   await page.goto('/');
-  await expect(page.locator('[data-photo-slot]')).toHaveCount(6);
+  await expect(page.locator('[data-photo-slot]')).toHaveCount(5);
   await expect(page.locator('#ensemble, .gallery-track')).toHaveCount(0);
   const scene = page.locator('#invitation');
   const photo = page.locator('[data-photo-slot="invitationLeft"]');
@@ -55,14 +55,17 @@ test('six plans photo, défilement réversible et questions pratiques', async ({
   await expect(scene.getByRole('button')).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(photo).toHaveCSS('transform', 'none');
-  await page.getByText('Comment confirmer notre présence ?', { exact: true }).click();
-  await expect(page.getByText('Pour l’instant, réservez simplement', { exact: false })).toBeVisible();
+  await expect(page.locator('.faq-block')).toHaveCount(0);
+  await expect(page.getByText('La fin de semaine se vit sur place, avec hébergement. Les détails pour les nuits suivront.')).toBeVisible();
+  await expect(page.getByText('Du 8 au 10 octobre 2027.')).toBeVisible();
+  await expect(page.getByText('02 / Section inutile')).toBeVisible();
+  await expect(page.getByText('P.S. On vous jure, on est vraiment contents.')).toBeVisible();
 });
 
 test('scènes sticky et cadrages aux différentes étapes', async ({ page, isMobile }, testInfo) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveClass(/scroll-ready/);
-  for (const selector of ['.hero-scroll', '#histoire', '.weekend-scroll', '.details-opening', '.location-card', '#calendrier', '.ending-scene']) {
+  for (const selector of ['.hero-scroll', '#histoire', '.weekend-scroll', '.details-opening', '.location-card', '#calendrier']) {
     const scene = page.locator(selector);
     const positions = selector.includes('scroll') ? [0, .5, 1] : [.25];
     for (const progress of positions) {
@@ -86,6 +89,37 @@ test('scènes sticky et cadrages aux différentes étapes', async ({ page, isMob
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.locator('.hero-copy')).toHaveCSS('opacity', '1');
   await expect(page.locator('.hero-stage')).toHaveCSS('position', 'relative');
+});
+
+test('histoire : photo de course animée et preuve encadrée', async ({ page }) => {
+  await page.goto('/');
+  const story = page.locator('#histoire');
+  const course = page.locator('.story-race-photo');
+  await story.evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.waitForTimeout(700);
+  const before = await course.evaluate(element => getComputedStyle(element).transform);
+  await page.evaluate(() => window.scrollBy({ top: 180, behavior: 'instant' }));
+  await expect.poll(() => course.evaluate(element => getComputedStyle(element).transform)).not.toBe(before);
+  await expect(course).toHaveAttribute('data-travel', '90');
+  await expect(page.locator('.story-proof img')).toHaveAttribute('src', '/photos/preuve-1200.webp');
+  await expect(page.locator('.story-proof')).toHaveCSS('box-shadow', /rgb/);
+});
+
+test('logistique inversée et calendrier dans la scène finale', async ({ page, request, isMobile }) => {
+  await page.goto('/');
+  const details = page.locator('.details-opening');
+  const text = details.locator('.section-heading');
+  const photo = details.locator('.details-photo');
+  expect(await text.evaluate(element => element.nextElementSibling?.classList.contains('details-photo'))).toBe(true);
+  if (!isMobile) {
+    const textBox = await text.boundingBox();
+    const photoBox = await photo.boundingBox();
+    expect(photoBox!.x).toBeGreaterThan(textBox!.x);
+  }
+  await expect(page.locator('#calendrier')).toHaveClass(/calendar-ending/);
+  await expect(page.locator('.ending-note, .closing-backdrop')).toHaveCount(0);
+  const snow = await request.get('/photos/snow-1200.webp');
+  expect(snow.status()).toBe(404);
 });
 
 test('calendriers : tout le séjour du 8 au 10 inclus', async ({ page, request }) => {
@@ -127,9 +161,9 @@ test('informations accessibles sans JavaScript', async ({ browser, baseURL }) =>
   const page = await context.newPage();
   await page.goto(baseURL!);
   await expect(page.locator('.weekend-title')).toHaveCSS('opacity', '1');
-  await expect(page.locator('[data-photo-slot]')).toHaveCount(6);
-  await page.getByText('Est-ce qu’on dort sur place ?', { exact: true }).click();
-  await expect(page.getByText('Oui ! L’idée est de passer', { exact: false })).toBeVisible();
+  await expect(page.locator('[data-photo-slot]')).toHaveCount(5);
+  await expect(page.locator('.faq-block')).toHaveCount(0);
+  await expect(page.getByText('La fin de semaine se vit sur place, avec hébergement. Les détails pour les nuits suivront.')).toBeVisible();
   await expect(page.getByRole('link', { name: /Apple \/ Outlook/ })).toHaveAttribute('href', '/invitation.ics');
   await context.close();
 });

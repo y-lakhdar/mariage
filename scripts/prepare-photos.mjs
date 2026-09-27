@@ -9,11 +9,10 @@ await mkdir(output, { recursive: true });
 const photos = {
   'garden-coast': 'secretgarden.jpg',
   course: 'img_course.jpg',
-  preuve: 'preuve.jpeg',
+  preuve: 'preuve.jpg',
   amis: 'amis.jpeg',
   canot: 'image_canot.jpg',
   kiss: 'IMG_7507.jpeg',
-  snow: 'IMG_2640.jpeg',
   embrace: 'IMG_2404.jpeg',
   climbing: 'img_climbing.JPG',
   end: 'img_end.JPG',
@@ -21,7 +20,7 @@ const photos = {
 };
 
 // Retire uniquement les variantes générées des photos remplacées.
-for (const id of ['river', 'ride', 'canoe', 'desert', 'summit']) {
+for (const id of ['river', 'ride', 'canoe', 'desert', 'summit', 'snow']) {
   for (const width of [640, 1200, 1800]) {
     await rm(resolve(output, `${id}-${width}.webp`), { force: true });
   }
