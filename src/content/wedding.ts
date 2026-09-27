@@ -1,7 +1,7 @@
 /** Les informations de l’invitation : commencez ici pour mettre le site à jour. */
 export const wedding = {
-  names: ['Yassine Lakhdar', 'Marie-Audrée Murphy Desjardins'],
-  title: 'Yassine & Marie-Audrée — On se marie !',
+  names: ['Marie-Audrée Murphy Desjardins', 'Yassine Lakhdar'],
+  title: 'Marie-Audrée & Yassine — On se marie !',
   description: 'Du 8 au 10 octobre 2027, retrouvez-nous à Grenville-sur-la-Rouge pour une fin de semaine d’amour, d’amitié et d’aventures. Réservez la date !',
   dates: {
     arrival: '2027-10-08',
@@ -13,19 +13,18 @@ export const wedding = {
   },
   address: '2311 Rte 148, Grenville-sur-la-Rouge, Québec J0V 1B0',
   town: 'Grenville-sur-la-Rouge',
-  updated: '2026-09-26',
-  intro: 'On a envie de célébrer notre amour entourés de nos amis. Une fin de semaine pour se retrouver, rire, jouer et profiter d’être ensemble. Attendez-vous à une célébration à notre image, loin du mariage traditionnel.',
+  updated: '2026-09-27',
+  intro: 'On a envie de célébrer notre amour entourés de nos amis proches et notre famille. Une fin de semaine pour se retrouver, rire, jouer et profiter d’être ensemble.',
   story: [
-    'Tout a commencé avec une course. Et une petite liste un peu folle.',
-    'Avant les 80 km de l’Ultra-Trail Harricana, on avait imaginé ce qui nous attendrait selon le classement de Yassine. À la 4e et à la 6e place, le même projet : on se marie !',
-    'Résultat ? 6e au général et 4e dans sa catégorie. Le destin avait parlé… deux fois. Alors, on a décidé de lui donner raison.',
+    'On a décidé de faire une liste pour motiver Yassine à courir plus vite lors de son 80km d\'ultra-trail.',
+    'Yass n\'était pas au courant de sa position durant la course, mais il est arrivé 6e overall et 4e dans sa catégorie d\'age. Voilà...',
+    'Il n\'y a pas eu de demande officielle à genou puisque Yassine ne se serait pas relevé du sol.',
   ],
-  // Remplacer null par { src: '/preuve.jpg', alt: 'Description de votre liste' }.
-  storyProof: null as null | { src: string; alt: string },
+  storyProof: { id: 'preuve', alt: 'La liste avant Harricana : à la 4e et à la 6e place, « On se marie ». À la 7e, « On va chez Gab à 3 pistolets ! ».' },
   schedule: [
-    { day: 'Vendredi', number: '08', title: 'On se retrouve.', text: 'On arrive, on s’installe et on prend le temps de se retrouver.', note: 'Heure d’arrivée à venir', icon: 'sun' },
-    { day: 'Samedi', number: '09', title: 'On célèbre !', text: 'De l’amour, des amis et plein de beaux moments à partager. C’est notre grand jour.', note: 'Programme détaillé à venir', icon: 'heart' },
-    { day: 'Dimanche', number: '10', title: 'On se dit à bientôt.', text: 'On profite encore un peu d’être ensemble, puis on repart avec de nouveaux souvenirs.', note: 'Heure de départ à venir', icon: 'spark' },
+    { day: 'Vendredi', number: '08', title: 'On se retrouve.', text: 'On arrive le soir, on s’installe et on prend le temps de se retrouver.', note: 'Heure d’arrivée à venir', icon: 'sun' },
+    { day: 'Samedi', number: '09', title: 'On célèbre !', text: 'Jeux, célébration, danse, etc.', note: 'Programme détaillé à venir', icon: 'heart' },
+    { day: 'Dimanche', number: '10', title: 'On se dit à bientôt.', text: 'Retour à la maison.', note: 'Heure de départ à venir', icon: 'spark' },
   ],
   practical: [
     { icon: 'moon', title: 'On reste à coucher', text: 'La fin de semaine se vit sur place, avec hébergement. Les détails pour les nuits et les réservations suivront.', status: 'Tarifs à confirmer' },
@@ -43,10 +42,10 @@ export const wedding = {
 // Six emplacements supplémentaires répartis dans le site, sans galerie autonome.
 // Pour les remplacer : préparer la nouvelle image puis changer son identifiant ici.
 export const scrollPhotos = {
-  invitationLeft: { id: 'embrace', alt: 'Marie-Audrée enlace Yassine, tous deux souriants' },
-  invitationRight: { id: 'canoe', alt: 'Un moment de complicité sur l’eau' },
-  weekendBackdrop: { id: 'river', alt: 'Yassine et Marie-Audrée au bord d’une rivière' },
-  weekendForeground: { id: 'ride', alt: 'Deux grands sourires dans la lumière de fin de journée' },
-  detailsTransition: { id: 'desert', alt: 'Yassine et Marie-Audrée se tiennent la main' },
-  closingBackdrop: { id: 'snow', alt: 'Yassine et Marie-Audrée côte à côte au grand air' },
+  invitationLeft: { id: 'climbing', alt: 'Marie-Audrée et Yassine échangent un sourire entre les rochers, équipés pour l’escalade' },
+  weekendBackdrop: { id: 'embrace', alt: 'Marie-Audrée enlace Yassine, tous deux souriants' },
+  weekendForeground: { id: 'mtl', alt: 'Marie-Audrée dans les bras de Yassine devant un miroir à Montréal' },
+  detailsTransition: { id: 'amis', alt: 'Marie-Audrée et Yassine entourés de leurs amis et d’un chien au sommet d’une montagne' },
+  closingBackdrop: { id: 'snow', alt: 'Marie-Audrée et Yassine côte à côte au grand air' },
+  endingPhoto: { id: 'end', alt: 'Marie-Audrée et Yassine s’éloignent main dans la main sur un sentier, leur matériel d’escalade sur le dos' },
 };

@@ -8,10 +8,11 @@ interface Props {
   travel?: number;
   rotate?: number;
   sizes?: string;
+  natural?: boolean;
 }
-const { slot, class: className, travel = 140, rotate = 0, sizes = '(max-width: 600px) 85vw, 45vw' } = Astro.props;
+const { slot, class: className, travel = 140, rotate = 0, sizes = '(max-width: 600px) 85vw, 45vw', natural = false } = Astro.props;
 const photo = scrollPhotos[slot];
 ---
-<div class:list={['scroll-photo', className]} data-photo-slot={slot} data-travel={travel} data-rotate={rotate}>
+<div class:list={['scroll-photo', className, { 'scroll-photo--natural': natural }]} data-photo-slot={slot} data-travel={travel} data-rotate={rotate} data-natural={natural || undefined}>
   <div class="scroll-photo-mask"><Photo id={photo.id} alt={photo.alt} sizes={sizes} /></div>
 </div>

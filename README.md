@@ -1,4 +1,4 @@
-# Yassine & Marie-Audrée — Notre invitation
+# Marie-Audrée & Yassine — Notre invitation
 
 Site public d’annonce du mariage, du **8 au 10 octobre 2027**, avec célébration le **samedi 9**. Astro génère des fichiers statiques : aucun serveur applicatif ni base de données n’est nécessaire.
 
@@ -40,9 +40,9 @@ L’image remplace automatiquement le placeholder. Garder la déclaration de typ
 
 Les originaux sont dans `photos_mariage/`. `scripts/prepare-photos.mjs` crée des WebP de 640, 1200 et 1800 pixels ainsi que l’aperçu de partage dans `public/photos/`. L’orientation EXIF est appliquée et les métadonnées retirées. Les originaux ne sont pas copiés dans le site publié.
 
-Six emplacements photo supplémentaires sont intégrés aux sections de l’invitation, du programme, des détails et du calendrier. Modifier `scrollPhotos` dans `src/content/wedding.ts` pour remplacer les images actuelles. Pour une nouvelle image, compléter aussi la liste dans le script de préparation, puis relancer `npm run photos`. La préparation est aussi exécutée par `npm run build`.
+Six emplacements photo supplémentaires sont intégrés aux sections de l’invitation, du programme, des détails, du calendrier et à la conclusion. Modifier `scrollPhotos` dans `src/content/wedding.ts` pour remplacer les images actuelles. Pour une nouvelle image, compléter aussi la liste dans le script de préparation, puis relancer `npm run photos`. La préparation est aussi exécutée par `npm run build`.
 
-Le composant `ScrollPhoto` expose `travel` (distance de déplacement) et `rotate` (angle). La position et la taille sont définies par sa classe CSS. Les six emplacements ont déjà des photos, sans cadres vides ni légendes de voyage.
+Le composant `ScrollPhoto` expose `travel` (distance de déplacement), `rotate` (angle) et `natural` (image entière, ratio original, sans zoom interne). La position et la taille sont définies par sa classe CSS. `img_climbing.JPG` accompagne l’introduction, `img_mtl.jpg` le programme, `amis.jpeg` les détails et `img_end.JPG` termine la page dans un grand cadre portrait. L’histoire suit directement l’accueil avec `img_course.jpg` et `preuve.jpeg`. `image_canot.jpg` illustre le point de rendez-vous.
 
 ## Vérifier la version de production
 

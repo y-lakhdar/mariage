@@ -1,6 +1,6 @@
 import { wedding } from '../content/wedding';
 
-export const calendarTitle = 'Mariage de Yassine & Marie-Audrée';
+export const calendarTitle = 'Mariage de Marie-Audrée & Yassine';
 export const calendarDescription = 'Une fin de semaine pour célébrer notre amour entourés de nos amis. Arrivée le 8 octobre, célébration le 9, départ le 10. Hébergement sur place. Horaires, tarifs et repas à confirmer.';
 const compact = (date: string) => date.replaceAll('-', '');
 
@@ -22,7 +22,7 @@ function fold(line: string) {
 
 export function calendarFile() {
   return [
-    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Yassine et Marie-Audree//Invitation//FR', 'CALSCALE:GREGORIAN',
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Marie-Audree et Yassine//Invitation//FR', 'CALSCALE:GREGORIAN',
     'BEGIN:VEVENT', 'UID:yassine-marie-audree-20271008@mariage', `DTSTAMP:${compact(wedding.updated)}T120000Z`,
     `DTSTART;VALUE=DATE:${compact(wedding.dates.arrival)}`, `DTEND;VALUE=DATE:${compact(wedding.dates.calendarEnd)}`,
     `SUMMARY:${escape(calendarTitle)}`, `DESCRIPTION:${escape(calendarDescription)}`, `LOCATION:${escape(wedding.address)}`,

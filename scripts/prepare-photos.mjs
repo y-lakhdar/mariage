@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { mkdir, stat } from 'node:fs/promises';
+import { mkdir, stat, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -7,16 +7,25 @@ const output = resolve(root, 'public/photos');
 await mkdir(output, { recursive: true });
 
 const photos = {
-  garden: 'secretgarden_18.JPG',
-  summit: 'IMG_0967.JPG',
+  'garden-coast': 'secretgarden.jpg',
+  course: 'img_course.jpg',
+  preuve: 'preuve.jpeg',
+  amis: 'amis.jpeg',
+  canot: 'image_canot.jpg',
   kiss: 'IMG_7507.jpeg',
-  desert: 'IMG_2976.jpeg',
   snow: 'IMG_2640.jpeg',
   embrace: 'IMG_2404.jpeg',
-  canoe: 'IMG_1075.jpeg',
-  river: 'IMG_1444.jpeg',
-  ride: 'IMG_1757.jpeg',
+  climbing: 'img_climbing.JPG',
+  end: 'img_end.JPG',
+  mtl: 'img_mtl.jpg',
 };
+
+// Retire uniquement les variantes générées des photos remplacées.
+for (const id of ['river', 'ride', 'canoe', 'desert', 'summit']) {
+  for (const width of [640, 1200, 1800]) {
+    await rm(resolve(output, `${id}-${width}.webp`), { force: true });
+  }
+}
 
 for (const [id, file] of Object.entries(photos)) {
   const source = resolve(root, 'photos_mariage', file);

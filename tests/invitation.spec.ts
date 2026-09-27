@@ -4,7 +4,7 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page).toHaveTitle('Yassine & Marie-Audrée — On se marie !');
+  await expect(page).toHaveTitle('Marie-Audrée & Yassine — On se marie !');
   await expect(page.locator('h1')).toContainText('marie');
   await expect(page.locator('.couple-names')).toContainText('Marie-Audrée Murphy Desjardins');
   await expect(page.locator('.day-card')).toHaveCount(3);
@@ -13,7 +13,7 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
   expect(await page.locator('.hero-arch img').evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await page.locator('.hero-arch img').evaluate((image: HTMLImageElement) => image.decode());
   await page.screenshot({ path: testInfo.outputPath('accueil.png') });
-  for (const section of ['#invitation', '#histoire', '#weekend', '#infos', '#calendrier']) {
+  for (const section of ['#histoire', '#invitation', '#weekend', '#infos', '#calendrier']) {
     await page.locator(section).scrollIntoViewIfNeeded();
     await page.waitForTimeout(850);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -23,6 +23,11 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
     await expect(image).toHaveJSProperty('complete', true);
     expect(await image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
   }
+  const climbing = page.locator('[data-photo-slot="invitationLeft"] img');
+  const ratios = await climbing.evaluate((image: HTMLImageElement) => ({ rendered: image.clientWidth / image.clientHeight, original: image.naturalWidth / image.naturalHeight }));
+  expect(ratios.rendered).toBeCloseTo(ratios.original, 2);
+  await expect(climbing).toHaveCSS('transform', 'none');
+  expect(await page.locator('#histoire').evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector('#invitation')!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
   for (const element of await page.locator('.reveal').all()) await element.scrollIntoViewIfNeeded();
   await page.waitForTimeout(900);
   await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo({ top: 0, behavior: 'instant' }); });
@@ -57,7 +62,7 @@ test('six plans photo, défilement réversible et questions pratiques', async ({
 test('scènes sticky et cadrages aux différentes étapes', async ({ page, isMobile }, testInfo) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveClass(/scroll-ready/);
-  for (const selector of ['.hero-scroll', '.weekend-scroll', '.details-opening', '#calendrier']) {
+  for (const selector of ['.hero-scroll', '#histoire', '.weekend-scroll', '.details-opening', '.location-card', '#calendrier', '.ending-scene']) {
     const scene = page.locator(selector);
     const positions = selector.includes('scroll') ? [0, .5, 1] : [.25];
     for (const progress of positions) {
@@ -94,12 +99,12 @@ test('calendriers : tout le séjour du 8 au 10 inclus', async ({ page, request }
   const ics = await response.text();
   expect(ics).toContain('DTSTART;VALUE=DATE:20271008');
   expect(ics).toContain('DTEND;VALUE=DATE:20271011');
-  expect(ics).toContain('SUMMARY:Mariage de Yassine & Marie-Audrée');
+  expect(ics).toContain('SUMMARY:Mariage de Marie-Audrée & Yassine');
   for (const line of ics.split('\r\n')) expect(Buffer.byteLength(line)).toBeLessThanOrEqual(75);
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('link', { name: /Apple \/ Outlook/ }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe('mariage-yassine-marie-audree.ics');
+  expect(download.suggestedFilename()).toBe('mariage-marie-audree-yassine.ics');
 });
 
 test('navigation mobile et préférence de mouvement réduit', async ({ page, isMobile }) => {
