@@ -63,27 +63,32 @@ Les captures réalisées par les tests sont dans `test-results/`.
 
 ## Déploiement automatique — Cloudflare Workers
 
-Le site est déployé sur **https://mariage.yassine-lakhdar.workers.dev**, dans le Worker **`mariage`**.
+Le déploiement cible **https://mariage.yassine-lakhdar.workers.dev**, dans le Worker **`mariage`**.
 `wrangler.jsonc` configure l’hébergement des fichiers statiques de `dist/` ; aucun serveur Astro ni adaptateur SSR n’est nécessaire.
 
-### Configuration initiale dans GitHub
+### Configuration initiale dans Cloudflare
 
-Dans [Settings → Secrets and variables → Actions](https://github.com/y-lakhdar/mariage/settings/secrets/actions), ajouter ces deux **Repository secrets** :
+Ouvrir **Workers & Pages → mariage → Settings → Build**, puis connecter le dépôt GitHub avec ces réglages :
 
-| Secret | Valeur |
+| Réglage | Valeur |
 | --- | --- |
-| `CLOUDFLARE_ACCOUNT_ID` | ID du compte Cloudflare qui possède le Worker `mariage` |
-| `CLOUDFLARE_API_TOKEN` | Token créé avec le modèle **Edit Cloudflare Workers**, limité à ce compte |
+| Dépôt | `y-lakhdar/mariage` |
+| Branche de production | `main` |
+| Build automatique | Activé |
+| Racine | Racine du dépôt (laisser le champ par défaut) |
+| Commande de build | `npm run check && npm run build` |
+| Commande de déploiement | `npm run deploy` |
+| API token | Conserver le token géré par Cloudflare, `mariage build token` |
+| Variable de build `NODE_VERSION` | `24` |
+| Variable de build `SITE_URL` | `https://mariage.yassine-lakhdar.workers.dev` |
 
-Le token se crée dans Cloudflare → API Tokens. L’Account ID se trouve dans les informations du compte Cloudflare ; ce n’est ni le nom du Worker ni son sous-domaine.
+**Workers Builds gère l’authentification** : aucun token ni Account ID à copier dans GitHub. Ajouter les variables dans les réglages du build, pas dans les variables d’exécution du Worker. Le dossier de sortie `dist/` est déjà déclaré dans `wrangler.jsonc`.
 
 ### À chaque push sur `main`
 
-Le workflow `.github/workflows/deploy.yml` installe les dépendances avec `npm ci` sous Node 24, vérifie le projet, génère les photos et le site, puis exécute `wrangler deploy`. `SITE_URL` est défini dans le workflow pour les métadonnées de partage et l’URL canonique.
+Cloudflare Workers Builds installe les dépendances, exécute la commande de build (vérification, génération des photos et site), puis `npm run deploy`. Le nom `mariage` dans `wrangler.jsonc` correspond au Worker connecté.
 
-Consulter [GitHub → Actions](https://github.com/y-lakhdar/mariage/actions) pour les journaux, puis Cloudflare → Workers & Pages → `mariage` → Deployments. Le workflow peut aussi être lancé avec **Run workflow**. Inclure les originaux de `photos_mariage/` dans chaque push qui change les photos.
-
-Si le Worker est également connecté à **Cloudflare Workers Builds**, désactiver son build Git automatique pour éviter deux déploiements concurrents : GitHub Actions assure ici le déploiement.
+Consulter les journaux dans **Cloudflare → Workers & Pages → mariage → Builds / Deployments**. Après avoir enregistré les réglages, pousser un commit ou relancer un build depuis Cloudflare. Inclure les originaux de `photos_mariage/` dans chaque push qui change les photos. Aucun workflow GitHub Actions de déploiement n’est nécessaire.
 
 ### Vérifier ou publier depuis le terminal
 
