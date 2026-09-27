@@ -352,18 +352,6 @@ h1 .gold {
 .hero-arch img {
   object-position: 42% 48%;
 }
-.orbit-line {
-  position: absolute;
-  left: -7%;
-  top: -7%;
-  width: 113%;
-  height: 112%;
-  z-index: -1;
-  stroke: var(--gold);
-  stroke-width: 0.7;
-  opacity: 0.6;
-  pointer-events: none;
-}
 .date-stamp {
   position: absolute;
   right: -30px;
@@ -1269,10 +1257,6 @@ h1 .gold {
     font-size: 20px;
     bottom: -33px;
     left: 5px;
-  }
-  .orbit-line {
-    top: -5%;
-    height: 108%;
   }
   .scroll-cue {
     justify-content: center;

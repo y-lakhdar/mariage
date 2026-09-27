@@ -9,9 +9,10 @@ const media = gsap.matchMedia();
 media.add({
   desktop: '(min-width: 601px)',
   mobile: '(max-width: 600px)',
+  heroDesktop: '(min-width: 901px) and (min-height: 650px)',
   reduce: '(prefers-reduced-motion: reduce)',
 }, context => {
-  const { desktop, reduce } = context.conditions!;
+  const { desktop, heroDesktop, reduce } = context.conditions!;
   if (reduce) return;
 
   document.documentElement.classList.add('scroll-ready');
@@ -23,15 +24,24 @@ media.add({
     scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: true },
   });
 
-  if (desktop) {
+  // Four cubic segments: the original tilted ellipse unfolds into a rectangle.
+  const squareMask = 'M 1 0 C 1 0.333333 1 0.666667 1 1 C 0.666667 1 0.333333 1 0 1 C 0 0.666667 0 0.333333 0 0 C 0.333333 0 0.666667 0 1 0 Z';
+  if (heroDesktop) {
+    const art = document.querySelector<HTMLElement>('.hero-art')!;
+    const stage = document.querySelector<HTMLElement>('.hero-stage')!;
     const hero = gsap.timeline({ scrollTrigger: { trigger: '.hero-scroll', start: 'top top', end: 'bottom bottom', scrub: .65, invalidateOnRefresh: true } });
     hero.to('.hero-copy', { y: -100, opacity: 0, duration: .4 }, 0)
       .to('.scroll-cue', { opacity: 0, duration: .2 }, 0)
-      .to('.hero-art', { x: () => -window.innerWidth * .18, scale: 1.35, rotation: -2, duration: 1, ease: 'power1.inOut' }, 0)
-      .to('.hero-arch', { borderRadius: '2px', duration: .7 }, .1)
+      .to(art, { x: () => stage.clientWidth / 2 - art.offsetLeft - art.offsetWidth / 2, scale: 1.22, rotation: -2, duration: 1, ease: 'power1.inOut' }, 0)
+      .to('#hero-photo-mask path', { attr: { d: squareMask }, duration: .7, ease: 'power1.inOut' }, .1)
       .to('.hero-arch img', { scale: 1.04, duration: 1 }, 0)
-      .to('.orbit-line', { opacity: 0, duration: .2 }, 0)
-      .fromTo('.hero-endword', { y: 90, opacity: 0 }, { y: -30, opacity: 1, duration: .45 }, .5);
+      .to('.hero-word-shade', { opacity: 1, duration: .45 }, .5)
+      .fromTo('.hero-endword', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .45 }, .5);
+  } else {
+    gsap.to('#hero-photo-mask path', {
+      attr: { d: squareMask }, ease: 'none',
+      scrollTrigger: { trigger: '.hero-art', start: 'top 45%', end: 'bottom 35%', scrub: .65, invalidateOnRefresh: true },
+    });
   }
 
   gsap.utils.toArray<HTMLElement>('.scroll-photo').forEach(photo => {

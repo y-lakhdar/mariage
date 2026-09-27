@@ -12,6 +12,8 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
   await expect(page.locator('.hero-arch img')).toHaveJSProperty('complete', true);
   expect(await page.locator('.hero-arch img').evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await page.locator('.hero-arch img').evaluate((image: HTMLImageElement) => image.decode());
+  await expect(page.locator('.hero-arch')).toHaveCSS('clip-path', /hero-photo-mask/);
+  await expect(page.locator('.orbit-line')).toHaveCount(0);
   await page.screenshot({ path: testInfo.outputPath('accueil.png') });
   for (const section of ['#histoire', '#invitation', '#weekend', '#infos', '#calendrier']) {
     await page.locator(section).scrollIntoViewIfNeeded();
@@ -79,16 +81,61 @@ test('scènes sticky et cadrages aux différentes étapes', async ({ page, isMob
     }
   }
   if (!isMobile) {
+    await page.locator('.hero-scroll').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    await page.waitForTimeout(600);
+    await expect(page.locator('#hero-photo-mask path')).toHaveAttribute('d', /^M 0\.669295/);
     await page.locator('.hero-scroll').evaluate(element => {
       const rect = element.getBoundingClientRect();
-      window.scrollTo({ top: window.scrollY + rect.top + (rect.height - innerHeight) * .5, behavior: 'instant' });
+      window.scrollTo({ top: window.scrollY + rect.top + (rect.height - innerHeight) * .95, behavior: 'instant' });
     });
     await page.waitForTimeout(1100);
     expect(Math.abs((await page.locator('.hero-stage').boundingBox())!.y)).toBeLessThan(2);
+    await expect(page.locator('#hero-photo-mask path')).toHaveAttribute('d', /^M 1 0 C 1 0\.333333/);
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.locator('.hero-copy')).toHaveCSS('opacity', '1');
   await expect(page.locator('.hero-stage')).toHaveCSS('position', 'relative');
+});
+
+test('cadre d’accueil proportionné sur téléphone, tablette et ordinateur', async ({ page, isMobile }, testInfo) => {
+  test.skip(isMobile, 'Tailles vérifiées avec redimensionnement dans le projet desktop.');
+  for (const [width, height] of [[360, 800], [600, 900], [768, 1024], [900, 900], [1024, 768], [1440, 900], [1920, 1080], [2560, 940], [3440, 1440]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    await page.locator('.hero-arch img').evaluate((image: HTMLImageElement) => image.decode());
+    await page.evaluate(async () => { await document.fonts.ready; });
+    const frame = await page.locator('.hero-arch').boundingBox();
+    expect(frame!.x).toBeGreaterThanOrEqual(0);
+    expect(frame!.x + frame!.width).toBeLessThanOrEqual(width);
+    expect(frame!.width / frame!.height).toBeCloseTo(600 / 650, 2);
+    const stage = await page.locator('.hero-stage').boundingBox();
+    expect(stage!.width).toBeLessThanOrEqual(1360);
+    expect(Math.abs(stage!.x + stage!.width / 2 - width / 2)).toBeLessThan(1);
+    if (width > 900) {
+      const copy = await page.locator('.hero-copy').boundingBox();
+      expect(frame!.x - copy!.x - copy!.width).toBeCloseTo(48, 0);
+      expect(frame!.width).toBeGreaterThan(copy!.width);
+      expect(frame!.y + frame!.height).toBeLessThanOrEqual(height);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`hero-${width}.png`) });
+    if (width >= 1440) {
+      for (const progress of [.7, 1]) {
+        await page.locator('.hero-scroll').evaluate((element, progress) => {
+          const rect = element.getBoundingClientRect();
+          window.scrollTo({ top: scrollY + rect.top + (rect.height - innerHeight) * progress, behavior: 'instant' });
+        }, progress);
+        await page.waitForTimeout(1000);
+        const photo = (await page.locator('.hero-arch').boundingBox())!;
+        const word = (await page.locator('.hero-endword').boundingBox())!;
+        expect(word.x).toBeGreaterThan(photo.x);
+        expect(word.x + word.width).toBeLessThan(photo.x + photo.width);
+        expect(word.y).toBeGreaterThan(photo.y);
+        expect(word.y + word.height).toBeLessThan(photo.y + photo.height);
+        await page.screenshot({ path: testInfo.outputPath(`hero-${width}-scroll-${progress}.png`) });
+      }
+    }
+  }
 });
 
 test('histoire : photo de course animée et preuve encadrée', async ({ page }) => {

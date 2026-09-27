@@ -2,19 +2,24 @@
 .reading-progress { position: fixed; inset: 0 0 auto; height: 2px; background: var(--gold); z-index: 50; transform: scaleX(0); transform-origin: left; }
 main { overflow: clip; }
 .hero-scroll { position: relative; }
-.hero-stage { overflow: visible; max-width: none; grid-template-columns: 36% 64%; gap: 0; padding: 28px 0 24px var(--gutter); }
-.hero-stage .hero-copy { padding-right: 24px; }
-.hero-stage h1 { font-size: clamp(96px, 9.6vw, 155px); }
+.hero-stage { overflow: visible; width: 100%; max-width: min(1360px, calc(92svh + 380px)); grid-template-columns: minmax(0, 420px) minmax(0, 1fr); column-gap: 48px; row-gap: 0; padding: 32px; min-height: 0; }
+.hero-stage .hero-copy { padding: 0; }
+.hero-stage h1 { font-size: clamp(96px, 9vw, 144px); letter-spacing: -.055em; }
 .hero-stage .couple-names { max-width: 380px; }
-.hero-art { transform-origin: center; margin: 0 0 30px; }
-.hero-stage .hero-arch { height: clamp(610px, 82svh, 1000px); border-radius: 38% 0 0 0; }
+.hero-stage .hero-art { transform-origin: center; width: 100%; justify-self: start; margin: 0; min-width: 0; }
+.hero-stage .title-spark { right: -48px; width: 34px; height: 34px; }
+.hero-stage .scroll-cue { position: absolute; left: 32px; bottom: 24px; padding: 0; }
+.hero-mask-defs { position: absolute; pointer-events: none; }
+/* The former orbit's 19-degree ellipse is now the image boundary itself.
+   Normalized SVG coordinates preserve its shape at every viewport size. */
+.hero-stage .hero-arch { width: 100%; height: auto; aspect-ratio: 600 / 650; border-radius: 0; clip-path: url(#hero-photo-mask); container-type: inline-size; }
 /* Crop toward the couple, above the midpoint of the new portrait photograph. */
-.hero-stage .hero-arch img { width: 120%; max-width: none; left: -10%; height: 130%; top: -15%; object-position: 50% 32%; }
-.hero-stage .orbit-line { left: -4%; top: -3%; width: 105%; height: 104%; }
+.hero-stage .hero-arch img { width: 100%; max-width: none; left: 0; height: 116%; top: -8%; object-position: 50% 32%; }
 .hero-endword { display: none; }
+.hero-word-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, #132c2540 65%, #132c2566); opacity: 0; pointer-events: none; }
 .scroll-ready .hero-scroll { height: 165svh; }
-.scroll-ready .hero-stage { position: sticky; top: 0; height: 100svh; min-height: 720px; }
-.scroll-ready .hero-endword { display: block; position: absolute; left: 22%; top: 43%; font-family: var(--serif); font-style: italic; font-size: clamp(180px, 30vw, 480px); line-height: .8; letter-spacing: -14px; color: var(--paper); opacity: 0; z-index: 4; pointer-events: none; }
+.scroll-ready .hero-stage { position: sticky; top: 0; height: calc(100svh - 100px); min-height: 0; }
+.scroll-ready .hero-endword { display: block; position: absolute; left: 10%; right: 10%; top: 53%; text-align: center; font-family: var(--serif); font-style: italic; font-size: clamp(96px, 36cqw, 300px); line-height: 1; letter-spacing: -.045em; color: var(--paper); text-shadow: 0 2px 24px #132c2533; opacity: 0; z-index: 4; pointer-events: none; }
 .scroll-photo { position: absolute; }
 .scroll-photo-mask { width: 100%; height: 100%; overflow: hidden; }
 .scroll-photo img { width: 100%; height: 125%; object-fit: cover; margin-top: -12.5%; }
@@ -80,27 +85,25 @@ main { overflow: clip; }
 .calendar-ending .ending-photo img { object-position: 50% 65%; translate: 0 -3%; }
 
 @media (max-width: 1000px) {
-  .hero-stage { grid-template-columns: 40% 60%; }
-  .hero-stage h1 { font-size: clamp(85px, 11vw, 110px); }
   .hero-stage .title-spark { right: -28px; width: 28px; }
-  .hero-stage .hero-arch { height: 700px; }
   .invitation-text h2 { font-size: 40px; }
   .details-opening { gap: 5%; }
   .weekend-foreground { width: 32%; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px), (max-height: 649px) {
   .scroll-ready .hero-scroll { height: auto; }
   .scroll-ready .hero-stage { position: relative; height: auto; min-height: 0; }
   .scroll-ready .hero-endword { display: none; }
-  .hero-stage { grid-template-columns: 1fr; padding: 35px 0 24px; }
-  .hero-stage .hero-copy { padding: 0 var(--gutter); }
-  .hero-stage h1 { font-size: clamp(108px, 24vw, 145px); }
-  .hero-stage .title-spark { right: -50px; width: 36px; }
-  .hero-stage .hero-art { margin: 35px 0 45px; }
-  .hero-stage .hero-arch { height: clamp(580px, 85svh, 760px); border-radius: 32% 0 0 0; }
-  .hero-stage .hero-arch img { width: 150%; left: -25%; height: 150%; top: -25%; object-position: 50% 30%; }
-  .hero-stage .orbit-line { display: none; }
+  .hero-stage { max-width: 640px; grid-template-columns: 1fr; gap: 32px; padding: 35px 24px 24px; min-height: 0; }
+  .hero-stage .scroll-cue { position: static; padding-top: 9px; }
+  .hero-stage .hero-copy { padding: 0; }
+  .hero-stage h1 { font-size: clamp(78px, 20vw, 130px); }
+  .hero-stage .title-spark { right: -36px; width: 28px; }
+  .hero-stage .hero-art { width: 100%; max-width: 540px; margin: 0; }
+}
+
+@media (max-width: 600px) {
   .invitation-stage { padding: 70px 24px 55px; grid-template-columns: 1fr; gap: 55px; }
   .invitation-color-block { top: 7%; width: 80%; height: 30%; }
   .invitation-photo-left { width: 100%; }

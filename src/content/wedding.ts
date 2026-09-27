@@ -17,6 +17,7 @@ export const wedding = {
   intro: 'On a envie de célébrer notre amour entourés de nos amis proches et notre famille. Une fin de semaine pour se retrouver, rire, jouer et profiter d’être ensemble.',
   story: [
     'On a décidé de faire une liste pour motiver Yassine à courir plus vite lors de son 80km d\'ultra-trail.',
+    '4e et 6e place, la même idée : « On se marie ! »',
     'Yass n\'était pas au courant de sa position durant la course, mais il est arrivé 6e overall et 4e dans sa catégorie d\'âge. Voilà!!!',
     'Il n\'y a pas eu de demande officielle à genou puisque Yassine ne se serait pas relevé du sol à ce moment.',
   ],

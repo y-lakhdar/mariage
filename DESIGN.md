@@ -1,5 +1,14 @@
 # Direction de défilement
 
+## Accueil — composition grand écran
+
+- Conteneur centré plafonné à 1360 px, resserré sur les fenêtres peu hautes. Colonne texte de 420 px maximum, gouttière de 48 px et photo occupant toute sa colonne.
+- L’ellipse inclinée reprend le tracé de l’ancien ornement ; elle constitue le masque de la photo. Le masque s’ouvre au défilement.
+- Le « oui. » et son léger dégradé de contraste sont à l’intérieur de la photo. Leur taille dépend du cadre, et le déplacement de la photo est calculé par rapport au conteneur, pas à la largeur de l’écran.
+- Sous 900 px, composition empilée et largeur limitée à 640 px ; défilement natif sans immobilisation.
+
+Fondements UX consultés : [web.dev — responsive design](https://web.dev/articles/responsive-web-design-basics) préconise une largeur maximale sur grand écran et des points de rupture dictés par le contenu ; [NN/g — proximité](https://www.nngroup.com/articles/gestalt-proximity/) recommande de rapprocher les éléments liés ; [NN/g — design visuel](https://www.nngroup.com/articles/principles-visual-design/) détaille hiérarchie, échelle, équilibre et contraste. Les dimensions ci-dessus sont des choix propres à cette composition.
+
 ## Références étudiées
 
 - [Quechua Lookbook 2016 / Akaru](https://www.awwwards.com/inspiration/quechua-lookbook-2016) : GIF de démonstration consulté dans le navigateur. Grands aplats, compositions asymétriques, superposition de photos et blocs de contenu. La fiche cite « parallax », « moving background » et « mouse parallax ».

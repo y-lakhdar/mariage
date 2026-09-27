@@ -57,16 +57,15 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
       <div class="hero-scroll" data-scroll-scene>
       <section id="accueil" class="hero section-wrap hero-stage">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="tiny-line"></span> Notre prochaine grande aventure</p>
+          <p class="eyebrow"><span class="tiny-line"></span> Surprise !</p>
           <h1>On se<br /><em>marie</em><span class="gold">.</span><Icon name="spark" class="title-spark" /></h1>
           <div class="couple-names"><span>{wedding.names[0]}</span><span class="name-amp">&</span><span>{wedding.names[1]}</span></div>
           <div class="hero-details"><span>{wedding.dates.label}</span><span>{wedding.town}, Québec</span></div>
         </div>
         <div class="hero-art">
-          <div class="hero-arch parallax-frame"><Photo id="garden-coast" alt="Marie-Audrée et Yassine assis côte à côte sur un rocher au-dessus de la mer" eager class="parallax-image" sizes="(max-width: 600px) 150vw, 85vw" /></div>
-          <svg class="orbit-line" viewBox="0 0 600 650" fill="none" aria-hidden="true"><ellipse cx="300" cy="325" rx="274" ry="312" transform="rotate(19 300 325)" /></svg>
+          <svg class="hero-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="hero-photo-mask" clipPathUnits="objectBoundingBox"><path d="M 0.669295 0.046151 C 0.907765 0.121946 1.025286 0.386586 0.931787 0.637239 C 0.838288 0.887893 0.569174 1.029644 0.330705 0.953849 C 0.092235 0.878054 -0.025286 0.613414 0.068213 0.362761 C 0.161712 0.112107 0.430826 -0.029644 0.669295 0.046151 Z" /></clipPath></defs></svg>
+          <div class="hero-arch parallax-frame"><Photo id="garden-coast" alt="Marie-Audrée et Yassine assis côte à côte sur un rocher au-dessus de la mer" eager class="parallax-image" sizes="(max-width: 900px) 100vw, 900px" /><div class="hero-word-shade" aria-hidden="true"></div><span class="hero-endword" aria-hidden="true">oui.</span></div>
         </div>
-        <span class="hero-endword" aria-hidden="true">oui.</span>
         <a href="#histoire" class="scroll-cue"><span>La suite, c’est par ici</span><Icon name="down" /></a>
       </section>
       </div>
@@ -80,7 +79,7 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
           <h2>80 kilomètres.<br />Et un <em>grand oui.</em></h2>
           <p class="story-lead">{wedding.story[0]}</p>
           {wedding.story.slice(1).map(paragraph => <p>{paragraph}</p>)}
-          <p>Le message était assez clair. Gab était un peu déçu que Yassine ne soit pas arrivé 7e, mais il nous pardonne puisqu’il sera un de nos célébrants.</p>
+          <p>Tout de même, le message était assez clair. Gab était un peu déçu que Yassine ne soit pas arrivé 7e, mais il nous pardonne puisqu’il sera un de nos célébrants.</p>
           <p class="story-postscript">P.S. On vous jure, on est vraiment contents.</p>
           <figure class="story-proof"><a href="/photos/preuve-1800.webp" target="_blank" rel="noreferrer" aria-label="Agrandir la preuve en image (nouvel onglet)"><Photo id={wedding.storyProof.id} alt={wedding.storyProof.alt} sizes="(max-width: 600px) 85vw, 360px" /></a>
             <figcaption>La preuve en image.</figcaption></figure>
@@ -126,7 +125,7 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
       <section id="infos" class="practical section-wrap">
         <div class="details-opening" data-scroll-scene>
           <div class="section-heading">
-            <div><p class="eyebrow">03 / Les petits détails</p><h2>La logistique.<em class="heading-aside">(Marie aime la logistique).</em></h2></div>
+            <div><p class="eyebrow">03 / Les petits détails</p><h2>La logistique.<em class="heading-aside">(Marie aime ça la logistique).</em></h2></div>
             <p>Nous avons décidé de célébrer ça au camp pour accueillir tout le monde et simplifier la logistique des invités, car certains d’entre vous arriverez d’aussi loin que le Luxembourg, le Maroc et Saint-Jérôme.</p>
             <p>Nous ne souhaitons donc pas recevoir de cadeaux, mais nous vous demanderons un montant par adulte pour contribuer à la location du camp.</p>
             <p>Détails à venir.</p>
