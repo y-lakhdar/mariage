@@ -104,7 +104,6 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
       <section id="weekend" class="weekend">
         <div class="weekend-scroll" data-scroll-scene>
           <div class="weekend-stage">
-            <ScrollPhoto slot="weekendBackdrop" class="weekend-backdrop" travel={0} sizes="100vw" />
             <div class="weekend-shade" aria-hidden="true"></div>
             <div class="weekend-title">
               <p class="eyebrow">02 / Section inutile</p>
@@ -112,7 +111,13 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
               <p>Du 8 au 10 octobre 2027.</p>
             </div>
             <span class="weekend-outline" aria-hidden="true">08 — 10</span>
-            <ScrollPhoto slot="weekendForeground" class="weekend-foreground" travel={270} rotate={-4} sizes="(max-width: 600px) 48vw, 28vw" />
+            <div class="weekend-media">
+              <div class="weekend-track">
+                <ScrollPhoto slot="weekendBackdrop" class="weekend-backdrop" travel={0} sizes="100vw" />
+                <ScrollPhoto slot="weekendForeground" class="weekend-foreground" travel={270} rotate={-4} sizes="(max-width: 600px) 100vw, 28vw" />
+              </div>
+            </div>
+            <div class="weekend-pagination" aria-hidden="true"><span>01</span><div class="weekend-progress"><span></span></div><span>02</span></div>
           </div>
         </div>
         <div class="section-wrap">
@@ -139,11 +144,12 @@ const updated = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long'
       <aside class="updates section-wrap"><div class="update-dot" aria-hidden="true"></div><div><strong>Cette invitation grandit avec nos préparatifs.</strong><p>Horaires, repas, tarifs, jeux… Revenez faire un tour, on ajoutera les détails ici.</p></div><span>Mis à jour le <time datetime={wedding.updated}>{updated}</time></span></aside>
       <section id="calendrier" class="ending-scene calendar-ending" data-scroll-scene>
         <div class="calendar-orbit" aria-hidden="true"></div>
-        <div class="calendar-inner reveal"><Icon name="spark" class="calendar-spark" /><h2>Il ne manque<br />plus que <em>vous.</em></h2><p>Bloquez la fin de semaine.</p><div class="calendar-date">8 — 10 <span>octobre</span> 2027</div><div class="calendar-buttons"><a class="button button-dark" href={googleCalendarUrl()} target="_blank" rel="noreferrer"><Icon name="calendar" /> Google Calendar <Icon name="northeast" /></a><a class="button button-outline" href="/invitation.ics" download="mariage-marie-audree-yassine.ics"><Icon name="down" /> Apple / Outlook (.ics)</a></div><span class="calendar-note">Toute la fin de semaine · Célébration le samedi 9 octobre</span></div>
+        <div class="calendar-inner reveal"><Icon name="spark" class="calendar-spark" /><h2>Il ne manque<br />plus que <em>vous.</em></h2><p>Bloquez la fin de semaine.</p><div class="calendar-date">8 — 10 <span>octobre</span> 2027</div><div class="calendar-buttons"><a class="button button-dark" href={googleCalendarUrl()} target="_blank" rel="noreferrer"><Icon name="calendar" /> Google Calendar <Icon name="northeast" /></a><a class="button button-outline" href="/invitation.ics" download="mariage-marie-audree-yassine.ics"><Icon name="down" /> Apple / Outlook (.ics)</a></div><p class="attendance-note" style="font-size: 18px;">Contactez-nous pour nous aviser de votre présence.</p></div>
         <ScrollPhoto slot="endingPhoto" class="ending-photo" travel={0} sizes="(max-width: 600px) 100vw, 60vw" />
       </section>
     </main>
     <footer class="site-footer section-wrap"><a class="monogram" href="#accueil" aria-label="Retour en haut">m<span>&</span>y<span class="monogram-dot">.</span></a><p>Youpi</p><span>On a hâte de vous voir <Icon name="heart" /></span></footer>
     <script src="../scripts/interactions.ts"></script>
+    <script src="../scripts/weekend-carousel.ts"></script>
   </body>
 </html>

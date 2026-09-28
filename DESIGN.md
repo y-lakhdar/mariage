@@ -25,7 +25,7 @@ Les anciennes destinations des sites ne sont pas prises comme dépendances. Les 
 5. **Lieu** : image verticale et typographie géante font la transition vers les détails.
 6. **Calendrier** : les actions de réservation de date terminent la page, à côté de la photographie de conclusion.
 
-Pas de section « Ensemble. », de galerie, de carrousel, de légendes de voyage ou d’agrandissement des photos.
+Pas de galerie autonome. La section 2 utilise sur mobile une rangée horizontale inspirée de [#89 Portfolio Horizontal Parallax](https://webflow.com/made-in-webflow/website/089-100dwfix) : cadres espacés, aperçu de la photo suivante et déplacement horizontal lié au scroll vertical. Le texte reste hors des photos pour préserver les visages. Sur desktop, les deux plans superposés restent en place.
 
 ## Système
 

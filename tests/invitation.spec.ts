@@ -7,6 +7,8 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
   await expect(page).toHaveTitle('Marie-Audrée & Yassine — On se marie !');
   await expect(page.locator('h1')).toContainText('marie');
   await expect(page.locator('.couple-names')).toContainText('Marie-Audrée Murphy Desjardins');
+  await expect(page.locator('#calendrier .attendance-note')).toHaveText('Contactez-nous pour nous aviser de votre présence.');
+  await expect(page.locator('.site-footer p')).toHaveText('Youpi');
   await expect(page.locator('.day-card')).toHaveCount(3);
   await page.evaluate(async () => { await document.fonts.ready; });
   await expect(page.locator('.hero-arch img')).toHaveJSProperty('complete', true);
@@ -136,6 +138,85 @@ test('cadre d’accueil proportionné sur téléphone, tablette et ordinateur', 
       }
     }
   }
+});
+
+test('carrousel mobile piloté par le scroll, réversible et sans superposition', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'Interaction propre au mobile.');
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await Promise.all([...document.images].map(image => { image.loading = 'eager'; return image.decode(); }));
+    await document.fonts.ready;
+  });
+  await expect(page.locator('html')).toHaveClass(/weekend-carousel-ready/);
+  const scene = page.locator('.weekend-scroll');
+  const track = page.locator('.weekend-track');
+  const seek = async (progress: number) => {
+    await scene.evaluate((element, progress) => {
+      const rect = element.getBoundingClientRect();
+      window.scrollTo({ top: scrollY + rect.top + (rect.height - innerHeight) * progress, behavior: 'instant' });
+    }, progress);
+    await page.waitForTimeout(800);
+  };
+  await seek(0);
+  const initial = await track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41);
+  for (const progress of [0, .5, 1]) {
+    await seek(progress);
+    const first = (await page.locator('.weekend-backdrop').boundingBox())!;
+    const second = (await page.locator('.weekend-foreground').boundingBox())!;
+    const title = (await page.locator('.weekend-title').boundingBox())!;
+    expect(first.x + first.width).toBeLessThanOrEqual(second.x + 1);
+    expect(title.y + title.height).toBeLessThan(first.y);
+    for (const image of await track.locator('img').all()) await expect(image).toHaveCSS('object-fit', 'cover');
+  }
+  expect(await track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41)).toBeLessThan(initial - 200);
+  await seek(0);
+  expect(await track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41)).toBeCloseTo(initial, 0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('html')).toHaveClass(/weekend-carousel-ready/);
+  await page.reload();
+  await page.evaluate(async () => {
+    await Promise.all([...document.images].map(image => { image.loading = 'eager'; return image.decode(); }));
+    await document.fonts.ready;
+  });
+  await expect(page.locator('html')).not.toHaveClass(/scroll-ready/);
+  await page.waitForTimeout(400);
+  await seek(1);
+  const first = (await page.locator('.weekend-backdrop').boundingBox())!;
+  const second = (await page.locator('.weekend-foreground').boundingBox())!;
+  expect(second.y).toBeCloseTo(first.y, 0);
+  expect(second.x + second.width).toBeLessThanOrEqual(page.viewportSize()!.width - 20);
+});
+
+test('carrousel actif sur mobile court et désactivé après passage desktop', async ({ page, isMobile }, testInfo) => {
+  test.skip(isMobile, 'Redimensionnement et molette vérifiés dans le projet desktop.');
+  for (const [width, height] of [[375, 560], [461, 541], [390, 844], [600, 600]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveClass(/weekend-carousel-ready/);
+    await page.locator('.weekend-scroll').evaluate(element => {
+      window.scrollTo({ top: scrollY + element.getBoundingClientRect().top, behavior: 'instant' });
+    });
+    await page.waitForTimeout(700);
+    const track = page.locator('.weekend-track');
+    const x = () => track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41);
+    const before = await x();
+    await page.screenshot({ path: testInfo.outputPath(`carousel-${width}-${height}-start.png`) });
+    await page.mouse.move(width / 2, height / 2);
+    for (let step = 0; step < 4; step++) {
+      await page.mouse.wheel(0, width * .3);
+      await page.waitForTimeout(450);
+    }
+    await expect.poll(x).toBeLessThan(before - width * .45);
+    const last = (await page.locator('.weekend-foreground').boundingBox())!;
+    expect(last.x + last.width).toBeLessThanOrEqual(width - 20);
+    expect((await page.locator('.weekend-media').boundingBox())!.height).toBeGreaterThan(180);
+    await page.screenshot({ path: testInfo.outputPath(`carousel-${width}-${height}-end.png`) });
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(page.locator('html')).not.toHaveClass(/weekend-carousel-ready/);
+  await expect(page.locator('.weekend-track')).toHaveCSS('display', 'contents');
+  await expect(page.locator('.weekend-track')).toHaveCSS('transform', 'none');
+  await expect(page.locator('.weekend-foreground')).toHaveCSS('position', 'absolute');
 });
 
 test('histoire : photo de course animée et preuve encadrée', async ({ page }) => {

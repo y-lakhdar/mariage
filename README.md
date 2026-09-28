@@ -55,11 +55,15 @@ npm run preview
 Tests navigateur (desktop et mobile, parallaxe des photos, navigation, mouvements réduits, fonctionnement sans JavaScript, calendrier) :
 
 ```sh
-npx playwright install chromium
+npx playwright install chromium webkit
 npm test
 ```
 
 Les captures réalisées par les tests sont dans `test-results/`.
+
+### Section 2 sur mobile
+
+À 600 px et moins, les deux photos forment une rangée de cadres avec un aperçu de la suivante, inspirée du [portfolio horizontal Webflow](https://089-100dwfix.webflow.io). `src/scripts/weekend-carousel.ts` synchronise directement leur translation horizontale avec le défilement vertical d’une scène sticky. Ce script est indépendant des effets GSAP : le mode « réduire les animations » conserve cette navigation directe, sans inertie ni zoom. Sans JavaScript, la rangée reste accessible par balayage horizontal natif. Sur desktop, la composition superposée GSAP est conservée.
 
 ## Déploiement automatique — Cloudflare Workers
 

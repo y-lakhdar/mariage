@@ -45,6 +45,7 @@ media.add({
   }
 
   gsap.utils.toArray<HTMLElement>('.scroll-photo').forEach(photo => {
+    if (!desktop && photo.closest('.weekend-track')) return;
     const scene = photo.closest<HTMLElement>('[data-scroll-scene]')!;
     const travel = Number(photo.dataset.travel) * strength;
     const rotation = Number(photo.dataset.rotate) * strength;
@@ -59,10 +60,12 @@ media.add({
 
   gsap.fromTo('.invitation-color-block', { scaleY: .65 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.invitation-stage', start: 'top bottom', end: 'bottom top', scrub: .6 } });
 
-  const weekend = gsap.timeline({ scrollTrigger: { trigger: '.weekend-scroll', start: 'top top', end: 'bottom bottom', scrub: .7, invalidateOnRefresh: true } });
-  weekend.fromTo('.weekend-backdrop .scroll-photo-mask', { clipPath: desktop ? 'inset(9% 8% 9% 8%)' : 'inset(3% 3% 3% 3%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'none' }, 0)
+  if (desktop) {
+    const weekend = gsap.timeline({ scrollTrigger: { trigger: '.weekend-scroll', start: 'top top', end: 'bottom bottom', scrub: .7, invalidateOnRefresh: true } });
+    weekend.fromTo('.weekend-backdrop .scroll-photo-mask', { clipPath: 'inset(9% 8% 9% 8%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'none' }, 0)
     .to('.weekend-title', { y: -90 * strength, duration: 1, ease: 'none' }, 0)
     .fromTo('.weekend-outline', { x: -100 * strength }, { x: 170 * strength, duration: 1, ease: 'none' }, 0);
+  }
 
 
   document.fonts.ready.then(() => ScrollTrigger.refresh());
