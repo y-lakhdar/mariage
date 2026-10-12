@@ -63,7 +63,11 @@ Les captures réalisées par les tests sont dans `test-results/`.
 
 ### Section 2 sur mobile
 
-À 600 px et moins, les deux photos forment une rangée de cadres avec un aperçu de la suivante, inspirée du [portfolio horizontal Webflow](https://089-100dwfix.webflow.io). `src/scripts/weekend-carousel.ts` synchronise directement leur translation horizontale avec le défilement vertical d’une scène sticky. Ce script est indépendant des effets GSAP : le mode « réduire les animations » conserve cette navigation directe, sans inertie ni zoom. Sans JavaScript, la rangée reste accessible par balayage horizontal natif. Sur desktop, la composition superposée GSAP est conservée.
+À 600 px et moins, les trois photos (`embrace`, `mtl`, `kiss`) forment une rangée de cadres avec un aperçu de la suivante, inspirée du [portfolio horizontal Webflow](https://089-100dwfix.webflow.io). `src/scripts/weekend-carousel.ts` synchronise leur translation horizontale avec le scroll vertical d’une scène sticky, sans interception des gestes. Des boutons de 44 px et les flèches du clavier permettent aussi de parcourir les photos. Avec « réduire les animations » ou une hauteur inférieure à 480 px, le défilement devient horizontal natif, sans immobilisation. Sans JavaScript, le balayage horizontal reste disponible. Sur desktop, la composition superposée GSAP est conservée.
+
+### Confort mobile
+
+Les textes principaux sont à 1rem, les actions tactiles à 44 px minimum et les boutons calendrier à 52 px. Les photos déclarent leurs dimensions générées pour réserver leur place dès le chargement. `src/scripts/mobile-choreography.ts` orchestre une mise en scène mobile dédiée : ellipse d’accueil ouverte jusqu’aux bords avec le « oui. », photos entières sur des plans décalés, aplat sauge en contre-mouvement, ouvertures de masque sur le lac et la conclusion. Les images du carrousel glissent légèrement dans leurs cadres pour renforcer la profondeur. Ces effets réversibles suivent le scroll natif et sont retirés avec la préférence de mouvement réduit. Les images du carrousel sont préchargées à l’approche de la section et son traitement du scroll est suspendu loin de l’écran. Les tests couvrent Chromium et WebKit, les petits écrans, le texte agrandi, le menu tactile, les trois photos et les modes sans animation/JavaScript.
 
 ## Déploiement automatique — Cloudflare Workers
 

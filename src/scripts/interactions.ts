@@ -10,14 +10,24 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) {
       entry.target.classList.add('is-visible');
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.08 });
+  }, { threshold: 0, rootMargin: '100px 0px' });
   document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
   document.documentElement.classList.add('motion-ready');
+  reducedMotion.addEventListener('change', event => {
+    if (!event.matches) return;
+    observer.disconnect();
+    document.querySelectorAll('.reveal').forEach(element => element.classList.add('is-visible'));
+  });
 }
 
 const frames = [...document.querySelectorAll<HTMLElement>('.parallax-frame')];
 let scheduled = false;
 function updateParallax() {
+  if (window.matchMedia('(max-width: 600px)').matches || reducedMotion.matches) {
+    frames.forEach(frame => frame.style.removeProperty('--parallax'));
+    scheduled = false;
+    return;
+  }
   const height = window.innerHeight;
   frames.forEach(frame => {
     const rect = frame.getBoundingClientRect();
@@ -50,8 +60,22 @@ toggle.addEventListener('click', () => {
   mobileMenu.hidden = !opening;
   toggle.setAttribute('aria-expanded', String(opening));
   toggle.setAttribute('aria-label', opening ? 'Fermer le menu' : 'Ouvrir le menu');
+  if (opening) mobileMenu.querySelector('a')?.focus({ preventScroll: true });
 });
-mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+  closeMenu();
+  const destination = document.querySelector<HTMLElement>(link.hash);
+  if (!destination) return;
+  destination.setAttribute('tabindex', '-1');
+  destination.focus({ preventScroll: true });
+  destination.addEventListener('blur', () => destination.removeAttribute('tabindex'), { once: true });
+}));
+document.addEventListener('pointerdown', event => {
+  if (!mobileMenu.hidden && !mobileMenu.contains(event.target as Node) && !toggle.contains(event.target as Node)) closeMenu();
+});
+document.addEventListener('focusin', event => {
+  if (!mobileMenu.hidden && !mobileMenu.contains(event.target as Node) && !toggle.contains(event.target as Node)) closeMenu();
+});
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && !mobileMenu.hidden) { closeMenu(); toggle.focus(); }
 });

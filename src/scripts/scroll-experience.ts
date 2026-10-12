@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { mobileChoreography } from './mobile-choreography';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -37,7 +38,7 @@ media.add({
       .to('.hero-arch img', { scale: 1.04, duration: 1 }, 0)
       .to('.hero-word-shade', { opacity: 1, duration: .45 }, .5)
       .fromTo('.hero-endword', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .45 }, .5);
-  } else {
+  } else if (desktop) {
     gsap.to('#hero-photo-mask path', {
       attr: { d: squareMask }, ease: 'none',
       scrollTrigger: { trigger: '.hero-art', start: 'top 45%', end: 'bottom 35%', scrub: .65, invalidateOnRefresh: true },
@@ -45,20 +46,22 @@ media.add({
   }
 
   gsap.utils.toArray<HTMLElement>('.scroll-photo').forEach(photo => {
-    if (!desktop && photo.closest('.weekend-track')) return;
+    if (photo.classList.contains('weekend-kiss')) return;
+    if (!desktop) return; // Mobile has its own coordinated layers below.
     const scene = photo.closest<HTMLElement>('[data-scroll-scene]')!;
     const travel = Number(photo.dataset.travel) * strength;
     const rotation = Number(photo.dataset.rotate) * strength;
-    const trigger = { trigger: scene, start: 'top bottom', end: 'bottom top', scrub: .65, invalidateOnRefresh: true };
+    const trigger = { trigger: scene, start: 'top bottom', end: 'bottom top', scrub: desktop ? .65 : true, invalidateOnRefresh: true };
     if (travel) gsap.fromTo(photo,
       { y: travel / 2, rotation: -rotation },
       { y: -travel / 2, rotation, ease: 'none', scrollTrigger: trigger });
-    if (!photo.dataset.natural) gsap.fromTo(photo.querySelector('img'),
+    if (desktop && !photo.dataset.natural) gsap.fromTo(photo.querySelector('img'),
       { yPercent: -3 * strength, scale: 1.1 },
       { yPercent: 3 * strength, scale: 1, ease: 'none', scrollTrigger: trigger });
   });
 
-  gsap.fromTo('.invitation-color-block', { scaleY: .65 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.invitation-stage', start: 'top bottom', end: 'bottom top', scrub: .6 } });
+  if (desktop) gsap.fromTo('.invitation-color-block', { scaleY: .65 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.invitation-stage', start: 'top bottom', end: 'bottom top', scrub: .6 } });
+  else mobileChoreography(squareMask);
 
   if (desktop) {
     const weekend = gsap.timeline({ scrollTrigger: { trigger: '.weekend-scroll', start: 'top top', end: 'bottom bottom', scrub: .7, invalidateOnRefresh: true } });

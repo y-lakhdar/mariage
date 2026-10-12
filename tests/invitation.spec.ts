@@ -23,6 +23,7 @@ test('invitation, photos et mise en page sans débordement', async ({ page }, te
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   }
   for (const image of await page.locator('main img').all()) {
+    if (!await image.isVisible()) continue;
     await image.evaluate(element => element.scrollIntoView({ block: 'center', behavior: 'instant' }));
     await expect(image).toHaveJSProperty('complete', true);
     expect(await image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
@@ -171,8 +172,10 @@ test('carrousel mobile piloté par le scroll, réversible et sans superposition'
   expect(await track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41)).toBeLessThan(initial - 200);
   await seek(0);
   expect(await track.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m41)).toBeCloseTo(initial, 0);
+  await expect(track.locator('img')).toHaveCount(3);
+  await expect(track.locator('img').last()).toHaveAttribute('src', '/photos/kiss-1200.webp');
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('html')).toHaveClass(/weekend-carousel-ready/);
+  await expect(page.locator('html')).not.toHaveClass(/weekend-carousel-ready/);
   await page.reload();
   await page.evaluate(async () => {
     await Promise.all([...document.images].map(image => { image.loading = 'eager'; return image.decode(); }));
@@ -180,9 +183,12 @@ test('carrousel mobile piloté par le scroll, réversible et sans superposition'
   });
   await expect(page.locator('html')).not.toHaveClass(/scroll-ready/);
   await page.waitForTimeout(400);
-  await seek(1);
+  await page.locator('.weekend-next').click();
+  await page.locator('.weekend-next').click();
+  await expect(page.locator('.weekend-current')).toHaveText('03');
+  await expect(track).toHaveCSS('transform', 'none');
   const first = (await page.locator('.weekend-backdrop').boundingBox())!;
-  const second = (await page.locator('.weekend-foreground').boundingBox())!;
+  const second = (await page.locator('.weekend-kiss').boundingBox())!;
   expect(second.y).toBeCloseTo(first.y, 0);
   expect(second.x + second.width).toBeLessThanOrEqual(page.viewportSize()!.width - 20);
 });
@@ -202,12 +208,13 @@ test('carrousel actif sur mobile court et désactivé après passage desktop', a
     const before = await x();
     await page.screenshot({ path: testInfo.outputPath(`carousel-${width}-${height}-start.png`) });
     await page.mouse.move(width / 2, height / 2);
-    for (let step = 0; step < 4; step++) {
-      await page.mouse.wheel(0, width * .3);
+    const range = await page.locator('.weekend-scroll').evaluate(element => element.clientHeight - document.querySelector<HTMLElement>('.weekend-stage')!.offsetHeight);
+    for (let step = 0; step < 6; step++) {
+      await page.mouse.wheel(0, Math.ceil(range / 6));
       await page.waitForTimeout(450);
     }
     await expect.poll(x).toBeLessThan(before - width * .45);
-    const last = (await page.locator('.weekend-foreground').boundingBox())!;
+    const last = (await page.locator('.weekend-kiss').boundingBox())!;
     expect(last.x + last.width).toBeLessThanOrEqual(width - 20);
     expect((await page.locator('.weekend-media').boundingBox())!.height).toBeGreaterThan(180);
     await page.screenshot({ path: testInfo.outputPath(`carousel-${width}-${height}-end.png`) });
@@ -217,29 +224,41 @@ test('carrousel actif sur mobile court et désactivé après passage desktop', a
   await expect(page.locator('.weekend-track')).toHaveCSS('display', 'contents');
   await expect(page.locator('.weekend-track')).toHaveCSS('transform', 'none');
   await expect(page.locator('.weekend-foreground')).toHaveCSS('position', 'absolute');
+  await expect(page.locator('.weekend-kiss')).toBeHidden();
 });
 
-test('histoire : photo de course animée et preuve encadrée', async ({ page }) => {
+test('histoire : photo de course animée et preuve encadrée', async ({ page, isMobile }) => {
   await page.goto('/');
   const story = page.locator('#histoire');
   const course = page.locator('.story-race-photo');
   await story.evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
   await page.waitForTimeout(700);
-  const before = await course.evaluate(element => getComputedStyle(element).transform);
+  const animated = isMobile ? course.locator('img') : course;
+  const before = await animated.evaluate(element => getComputedStyle(element).transform);
   await page.evaluate(() => window.scrollBy({ top: 180, behavior: 'instant' }));
-  await expect.poll(() => course.evaluate(element => getComputedStyle(element).transform)).not.toBe(before);
+  await expect.poll(() => animated.evaluate(element => getComputedStyle(element).transform)).not.toBe(before);
   await expect(course).toHaveAttribute('data-travel', '90');
   await expect(page.locator('.story-proof img')).toHaveAttribute('src', '/photos/preuve-1200.webp');
   await expect(page.locator('.story-proof')).toHaveCSS('box-shadow', /rgb/);
 });
 
-test('logistique inversée et calendrier dans la scène finale', async ({ page, request, isMobile }) => {
+test('logistique en fond mobile et calendrier dans la scène finale', async ({ page, request, isMobile }, testInfo) => {
   await page.goto('/');
   const details = page.locator('.details-opening');
   const text = details.locator('.section-heading');
   const photo = details.locator('.details-photo');
   expect(await text.evaluate(element => element.nextElementSibling?.classList.contains('details-photo'))).toBe(true);
-  if (!isMobile) {
+  if (isMobile) {
+    await details.scrollIntoViewIfNeeded();
+    await photo.locator('img').evaluate(image => (image as HTMLImageElement).decode());
+    await expect(photo).toHaveCSS('position', 'absolute');
+    await expect(text).toHaveCSS('color', 'rgb(246, 245, 238)');
+    const textBox = (await text.boundingBox())!;
+    const photoBox = (await photo.boundingBox())!;
+    expect(photoBox.y).toBeLessThan(textBox.y);
+    expect(photoBox.y + photoBox.height).toBeGreaterThan(textBox.y + textBox.height);
+    await page.screenshot({ path: testInfo.outputPath('logistique-backdrop.png') });
+  } else {
     const textBox = await text.boundingBox();
     const photoBox = await photo.boundingBox();
     expect(photoBox!.x).toBeGreaterThan(textBox!.x);

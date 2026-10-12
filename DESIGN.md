@@ -32,3 +32,13 @@ Pas de galerie autonome. La section 2 utilise sur mobile une rangée horizontale
 `src/scripts/scroll-experience.ts` utilise GSAP / ScrollTrigger avec des timelines réversibles synchronisées au scroll natif. `src/styles/scroll-experience.css` définit les scènes ; `src/components/ScrollPhoto.astro` expose profondeur, rotation et un mode `natural` qui conserve l’image entière. Les cinq photos supplémentaires sont configurables dans `scrollPhotos`, dans `src/content/wedding.ts`.
 
 Sur mobile : réduction des amplitudes, mise en page recomposée, ouverture sans immobilisation. Avec mouvement réduit ou sans JavaScript : les mêmes textes et images restent accessibles dans un parcours statique.
+
+## Revue mobile
+
+- **Lecture** : texte courant à 1rem / 1.7 ; informations secondaires à 12–14 px ; hiérarchie serif conservée. Les tailles et espacements sont vérifiés dès 320 px.
+- **Toucher** : actions de 44 px minimum, boutons calendrier de 52 px, retour tactile discret et focus dirigé vers la section choisie dans le menu.
+- **Mouvement** : chorégraphie mobile dédiée, réversible. L’ellipse d’accueil s’ouvre en plein bord avec apparition du « oui. ». Les photos entières passent de 90 % à 100 % de leur taille, se redressent de 2–3 degrés et parcourent 80–110 px ; l’aplat sauge se déplace indépendamment. Les accents typographiques arrivent latéralement. Le lac et la conclusion s’ouvrent par masque avec parallaxe interne. Le carrousel à trois images ajoute un contre-mouvement de ±8 px dans chaque cadre, avec navigation précédente/suivante et clavier. Les textes de lecture restent stables.
+- **Confort** : préférence de mouvement réduit et fenêtres de moins de 480 px de haut utilisent une rangée à scroll horizontal natif, sans scène sticky. Les autres animations sont désactivées avec le mouvement réduit.
+- **Chargement** : dimensions intrinsèques de toutes les photos, WebP responsive, priorité à l’image d’accueil, chargement du carrousel à proximité et calculs du scroll suspendus hors zone.
+
+Recommandations consultées : [web.dev — animations performantes](https://web.dev/articles/animations-guide) (transform/opacity, usage limité de `will-change`), [W3C — taille des cibles](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) (minimum AA de 24 px ; choix projet plus confortable de 44 px), [W3C — animations déclenchées par interaction](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html) (désactivation des mouvements non essentiels).
